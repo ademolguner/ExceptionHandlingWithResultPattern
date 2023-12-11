@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExceptionHandlingWithResultPattern.Framework", "ExceptionHandlingWithResultPattern.Framework\ExceptionHandlingWithResultPattern.Framework.csproj", "{9A1213B4-9C9D-4772-A734-07BF103B5A52}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExceptionHandlingWithResultPattern.Api", "ExceptionHandlingWithResultPattern.Api\ExceptionHandlingWithResultPattern.Api.csproj", "{8C9D6A11-6043-46D6-B75E-CD608ECA2BAE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9A1213B4-9C9D-4772-A734-07BF103B5A52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A1213B4-9C9D-4772-A734-07BF103B5A52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A1213B4-9C9D-4772-A734-07BF103B5A52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A1213B4-9C9D-4772-A734-07BF103B5A52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C9D6A11-6043-46D6-B75E-CD608ECA2BAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C9D6A11-6043-46D6-B75E-CD608ECA2BAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C9D6A11-6043-46D6-B75E-CD608ECA2BAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C9D6A11-6043-46D6-B75E-CD608ECA2BAE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
