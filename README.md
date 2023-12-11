@@ -1,1 +1,1 @@
-# ExceptionHandlingWitgResultPattern
+# ExceptionHandlingWithResultPattern
