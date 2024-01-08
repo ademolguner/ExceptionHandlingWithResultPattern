@@ -1,11 +1,10 @@
 using System.Net;
 using ExceptionHandlingWithResultPattern.Framework.Exceptions.Base;
-using Microsoft.AspNetCore.Http;
 
 namespace ExceptionHandlingWithResultPattern.Framework.Exceptions;
 
 [Serializable]
-public class AlreadyExistException : CustomBaseException
+public sealed class AlreadyExistException : CustomBaseException
 {
     public override string MessageFormat =>  "{propName} : '{propValue}' ile bir {objectName} kaydı mevcut.";
     public override string Title => "Already Exist Error";

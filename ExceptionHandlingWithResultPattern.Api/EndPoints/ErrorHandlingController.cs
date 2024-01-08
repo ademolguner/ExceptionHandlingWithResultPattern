@@ -1,15 +1,12 @@
-using System.Threading.Tasks;
 using ExceptionHandlingWithResultPattern.Api.Features.ResultPatterns.Already;
 using ExceptionHandlingWithResultPattern.Api.Features.ResultPatterns.CreateOperation;
 using ExceptionHandlingWithResultPattern.Api.Features.ResultPatterns.Fail;
 using ExceptionHandlingWithResultPattern.Api.Features.ResultPatterns.InvalidParameter;
 using ExceptionHandlingWithResultPattern.Api.Features.ResultPatterns.Search;
+using ExceptionHandlingWithResultPattern.Api.Features.ResultPatterns.Success;
 using ExceptionHandlingWithResultPattern.Api.Models.Requests;
 using MediatR;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 
 namespace ExceptionHandlingWithResultPattern.Api.EndPoints;
 
@@ -30,21 +27,21 @@ public static class ErrorHandlingController
     [HttpPost("error/already-exception")]
     private static async Task<IResult> AlreadyAsync([FromBody] AlreadyRequest request,IMediator sender)
     {
-        var response = await sender.Send(new AlreadyResponseCommand(request.Uuid,request.Name));
+        var response = await sender.Send(new AlreadyResponseCommand(request.UserId,request.Name));
         return Results.Ok(response);
     }
     
     [HttpPost("error/invalid-parameter-exception")]
     private static async  Task<IResult> InvalidParameterAsync([FromBody] InvalidRequest request,IMediator sender)
     {
-        var response = await sender.Send(new InvalidParameterResponseCommand(request.Uuid,request.Name));
+        var response = await sender.Send(new InvalidParameterResponseCommand(request.UserId,request.Name));
         return Results.Ok(response);
     }
     
     [HttpPost("error/create-operation-exception")]
     private static async Task<IResult> CreateOperationAsync([FromBody] CreateRequest request,IMediator sender)
     {
-        var response = await sender.Send(new CreateOperationResponseCommand(request.Uuid,request.Name));
+        var response = await sender.Send(new CreateOperationResponseCommand(request.UserId,request.Name));
         return Results.Ok(response);
     }
     
@@ -58,22 +55,21 @@ public static class ErrorHandlingController
     [HttpPost("error/update-operation-exception")]
     private static async Task<IResult> UpdateOperationAsync([FromBody] UpdateRequest request,IMediator sender)
     {
-        var response = await sender.Send(new AlreadyResponseCommand(request.Uuid,request.Name));
+        var response = await sender.Send(new AlreadyResponseCommand(request.UserId,request.Name));
         return Results.Ok(response);
     }
     
     [HttpPost("fail")]
     private static async Task<IResult> FailAsync([FromBody] FailRequest request,IMediator sender)
     {
-        var response = await sender.Send(new FailResponseQuery(request.Id,request.Name));
+        var response = await sender.Send(new FailResponseQuery(request.UserId,request.Name));
         return Results.Ok(response);
     }
     
     [HttpPost("success")]
     private static async Task<IResult> SuccessAsync([FromBody] SuccessRequest request,IMediator sender)
     {
-        var response = await sender.Send(new AlreadyResponseCommand(request.Uuid,request.Name));
+        var response = await sender.Send(new SuccessResponseCommand(request.UserId,request.Name));
         return Results.Ok(response);
     }
-
 }

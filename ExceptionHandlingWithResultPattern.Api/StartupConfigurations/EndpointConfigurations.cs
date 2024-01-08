@@ -1,5 +1,4 @@
 using ExceptionHandlingWithResultPattern.Api.EndPoints;
-using Microsoft.AspNetCore.Routing;
 
 namespace ExceptionHandlingWithResultPattern.Api.StartupConfigurations;
 

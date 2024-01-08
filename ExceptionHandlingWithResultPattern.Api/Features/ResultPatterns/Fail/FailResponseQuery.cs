@@ -1,10 +1,11 @@
 using ExceptionHandlingWithResultPattern.Api.Models.Responses;
+using ExceptionHandlingWithResultPattern.Framework.ResultPattern;
 using MediatR;
 
 namespace ExceptionHandlingWithResultPattern.Api.Features.ResultPatterns.Fail;
 
-public class FailResponseQuery(string uuid, string name) : IRequest<ResponseModelDto>
+public class FailResponseQuery(string userId, string name) : IRequest<GenericResult<ResponseModelDto>>
 {
-    public string Uuid { get; set; } = uuid;
+    public string UserId { get; set; } = userId;
     public string Name { get; set; } = name;
 }

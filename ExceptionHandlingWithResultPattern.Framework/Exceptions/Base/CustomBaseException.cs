@@ -2,7 +2,7 @@ using System.Net;
 
 namespace ExceptionHandlingWithResultPattern.Framework.Exceptions.Base;
 
-
+[Serializable]
 public abstract class CustomBaseException : Exception
 {
     public virtual string MessageFormat { get;}

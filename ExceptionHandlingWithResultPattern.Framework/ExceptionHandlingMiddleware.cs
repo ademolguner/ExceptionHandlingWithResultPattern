@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.Mime;
 using System.Text.Json;
 using ExceptionHandlingWithResultPattern.Framework.Exceptions.Base;
 using ExceptionHandlingWithResultPattern.Framework.Exceptions.Validation;
@@ -28,28 +27,28 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
             var statusCode = (int)HttpStatusCode.InternalServerError;
             var title = "Server error";
             
-            if (exception is ArgumentValidationException validationExp)
+            switch (exception)
             {
-                statusCode = (int)validationExp.StatusCode;
-                title = "Validation Error";
-                messages.AddRange(validationExp.MessageProps);
+                case ArgumentValidationException validationExp:
+                    statusCode = (int)ArgumentValidationException.StatusCode;
+                    title = "Validation Error";
+                    messages.AddRange(validationExp.MessageProps);
+                    break;
+                case CustomBaseException customBaseException:
+                {
+                    statusCode = (int)customBaseException.StatusCode;
+                    title = customBaseException.Title;
                 
-            }
-            
-            else if (exception is CustomBaseException customBaseException)
-            {
-                statusCode = (int)customBaseException.StatusCode;
-                title = customBaseException.Title;
+                    var responseExMessage = customBaseException.MessageFormat;
+                    foreach (var (key, value) in customBaseException.MessageProps)
+                        responseExMessage = responseExMessage.Replace(key, value);
                 
-                var responseExMessage = customBaseException.MessageFormat;
-                foreach (var (key, value) in customBaseException.MessageProps)
-                    responseExMessage = responseExMessage.Replace(key, value);
-                
-                messages.Add(responseExMessage);
-            }
-            else
-            {
-                messages.Add(UnexpectedErrorMessage);
+                    messages.Add(responseExMessage);
+                    break;
+                }
+                default:
+                    messages.Add(UnexpectedErrorMessage);
+                    break;
             }
 
             var problemDetails = new ProblemDetails
@@ -63,9 +62,9 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
                 problemDetails.Status,
                 problemDetails.Title,
                 problemDetails.Detail,
-                context.Request.Path);
+                context.Request.Path.Value);
             
-            var responseResult = JsonSerializer.Serialize(GenericResult<GenericResponse>.Fail(problemDetails));
+            var responseResult = JsonSerializer.Serialize(GenericResult<GenericResponse>.Exception(problemDetails));
             await context.Response.WriteAsync(responseResult);
         }
     }
