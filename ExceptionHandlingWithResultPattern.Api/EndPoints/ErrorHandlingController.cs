@@ -4,6 +4,7 @@ using ExceptionHandlingWithResultPattern.Api.Features.ResultPatterns.Fail;
 using ExceptionHandlingWithResultPattern.Api.Features.ResultPatterns.InvalidParameter;
 using ExceptionHandlingWithResultPattern.Api.Features.ResultPatterns.Search;
 using ExceptionHandlingWithResultPattern.Api.Features.ResultPatterns.Success;
+using ExceptionHandlingWithResultPattern.Api.Features.ResultPatterns.ValidateError;
 using ExceptionHandlingWithResultPattern.Api.Models.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,7 @@ public static class ErrorHandlingController
         appGroup.MapPost("/update-operation-exception", UpdateOperationAsync).WithName(nameof(UpdateOperationAsync));
         appGroup.MapPost("/fail", FailAsync).WithName(nameof(FailAsync));
         appGroup.MapPost("/success", SuccessAsync).WithName(nameof(SuccessAsync));
+        appGroup.MapPost("/validation-exception", ValidationAsync).WithName(nameof(ValidationAsync));
     }
     
     [HttpPost("error/already-exception")]
@@ -70,6 +72,13 @@ public static class ErrorHandlingController
     private static async Task<IResult> SuccessAsync([FromBody] SuccessRequest request,IMediator sender)
     {
         var response = await sender.Send(new SuccessResponseCommand(request.UserId,request.Name));
+        return Results.Ok(response);
+    }
+    
+    [HttpPost("validation-exception")]
+    private static async Task<IResult> ValidationAsync([FromBody] ValidateErrorRequest request,IMediator sender)
+    {
+        var response = await sender.Send(new ValidateErrorResponseCommand(request.UserId,request.Name));
         return Results.Ok(response);
     }
 }

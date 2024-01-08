@@ -12,6 +12,7 @@ namespace ExceptionHandlingWithResultPattern.Framework;
 public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
 {
     private const string UnexpectedErrorMessage = "Beklenmeyen bir hata ile karşılaşıldı.";
+    private const string ValidationErrorMessage = "Doğrulama hata-hataları ile karşılaşıldı !";
 
     public async Task InvokeAsync(HttpContext context)
     {
@@ -23,7 +24,7 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
         }
         catch (Exception exception)
         {
-            var messages = new List<string>();
+            var problemDetails = new ProblemDetails();
             var statusCode = (int)HttpStatusCode.InternalServerError;
             var title = "Server error";
             
@@ -32,7 +33,9 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
                 case ArgumentValidationException validationExp:
                     statusCode = (int)ArgumentValidationException.StatusCode;
                     title = "Validation Error";
-                    messages.AddRange(validationExp.MessageProps);
+                    problemDetails.Extensions["Errors"] = validationExp.MessageProps;
+                    problemDetails.Detail = string.Join(Environment.NewLine, new List<string>{ValidationErrorMessage}.ToArray());
+                    
                     break;
                 case CustomBaseException customBaseException:
                 {
@@ -43,20 +46,17 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
                     foreach (var (key, value) in customBaseException.MessageProps)
                         responseExMessage = responseExMessage.Replace(key, value);
                 
-                    messages.Add(responseExMessage);
+                    problemDetails.Detail = string.Join(Environment.NewLine, new List<string>{responseExMessage}.ToArray());
                     break;
                 }
                 default:
-                    messages.Add(UnexpectedErrorMessage);
+                    problemDetails.Detail = string.Join(Environment.NewLine, new List<string>{UnexpectedErrorMessage}.ToArray());
                     break;
             }
 
-            var problemDetails = new ProblemDetails
-            { 
-                Status = statusCode,
-                Title = title,
-                Detail = string.Join(Environment.NewLine,messages.ToArray())
-            };
+
+            problemDetails.Status = statusCode;
+            problemDetails.Title = title;
             
             logger.LogError("Exception Detail {@Exception-Status} - {@Exception-Title} - {@Exception-Detail} - {@Context-Path}",
                 problemDetails.Status,
