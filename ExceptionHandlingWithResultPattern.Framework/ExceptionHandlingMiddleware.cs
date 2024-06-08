@@ -65,6 +65,9 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
                 context.Request.Path.Value);
             
             var responseResult = JsonSerializer.Serialize(GenericResult<GenericResponse>.Exception(problemDetails));
+
+            context.Response.StatusCode = statusCode;
+
             await context.Response.WriteAsync(responseResult);
         }
     }
